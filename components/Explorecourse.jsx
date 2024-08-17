@@ -1,46 +1,31 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import MyCourse from './MyCourse';
 
+const tabs = ['All', 'IA Example', 'EE Example', 'Tok Example'];
 function Explorecourse() {
   return (
     <div className="col-span-12">
       <h2 className="font-[600] text-[#5B6170] text-[24px]">
         Explore coursework
       </h2>
-      <Tabs defaultValue="All">
+      <Tabs defaultValue={tabs[0]}>
         <TabsList className="mt-3 w-full flex flex-wrap justify-start">
-          <TabsTrigger className="text-[20px] rounded-2xl px-4" value="All">
-            All
-          </TabsTrigger>
-          <TabsTrigger
-            value="IA Example"
-            className="text-[20px] rounded-2xl px-4"
-          >
-            IA Example
-          </TabsTrigger>
-          <TabsTrigger
-            value="EE Example"
-            className="text-[20px] rounded-2xl px-4"
-          >
-            EE Example
-          </TabsTrigger>
-          <TabsTrigger
-            value="IO Example"
-            className="text-[20px] rounded-2xl px-4"
-          >
-            IO Example
-          </TabsTrigger>
-          <TabsTrigger
-            value="Tok Example"
-            className="text-[20px] rounded-2xl px-4"
-          >
-            Tok Example
-          </TabsTrigger>
+          {tabs.map((tabValue, index) => (
+            <TabsTrigger
+              className="text-[20px] rounded-2xl px-3"
+              value={tabValue}
+              key={index}
+            >
+              {tabValue}
+            </TabsTrigger>
+          ))}
         </TabsList>
-
-        <TabsContent value="All">
-          Make changes to your account here.
-        </TabsContent>
+        {tabs.map((tabValue, index) => (
+          <TabsContent value={tabValue} key={index}>
+            <MyCourse />
+          </TabsContent>
+        ))}
       </Tabs>
     </div>
   );

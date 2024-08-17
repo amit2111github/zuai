@@ -2,20 +2,22 @@
 import React, { useState, useRef } from 'react';
 import { FileUp } from 'lucide-react';
 import CourseData from './CourseData';
+import { fileStore } from '@/store/file';
+import Image from 'next/image';
+import UploadedImage from '@/public/uploadedimage.svg';
+import Check from '@/public/check.svg';
+
 function Upload() {
   const [dragActive, setDragActive] = useState(false);
+  const { file, setFile } = fileStore((state) => state);
+  // console.log(file, 'was file');
   const inputRef = useRef(null);
-  const [files, setFiles] = useState(null);
+  // const [files, setFiles] = useState(null);
 
   function handleChange(e) {
     e.preventDefault();
-    // console.log('File has been added');
-    console.log();
     if (e.target.files && e.target.files[0]) {
-      //   console.log(e.target.files);
-      //   for (let i = 0; i < e.target.files['length']; i++) {
-      setFiles(e.target.files[0]);
-      //   }
+      setFile(e.target.files[0]);
     }
   }
 
@@ -31,11 +33,7 @@ function Upload() {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    // console.log(e.dataTransfer.files);
-    setFiles(e.dataTransfer.files[0]);
-    // if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-    //   for (let i = 0; i < e.dataTransfer.files['length']; i++) {}
-    // }
+    setFile(e.dataTransfer.files[0]);
   }
 
   function handleDragLeave(e) {
@@ -56,12 +54,9 @@ function Upload() {
     setDragActive(true);
   }
 
-  //   function removeFile(fileName, idx) {
-  //     const newArr = [...files];
-  //     newArr.splice(idx, 1);
-  //     setFiles([]);
-  //     setFiles(newArr);
-  //   }
+  function removeFile() {
+    setFile(null);
+  }
 
   function openFileExplorer() {
     inputRef.current.value = '';
@@ -80,11 +75,6 @@ function Upload() {
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
       >
-        <div className="text-gray-400">
-          <FileUp size={50} strokeWidth={2.45} absoluteStrokeWidth />
-        </div>
-
-        {/* this input element allows us to select files for upload. We make it hidden so we can activate it when the user clicks select files */}
         <input
           placeholder="fileInput"
           className="hidden"
@@ -93,18 +83,44 @@ function Upload() {
           onChange={handleChange}
           accept=".pdf"
         />
-        <h2 className="mt-2 text-[#7A8196] font-[700] text-[16px]">
-          Drag and drop a PDF
-        </h2>
-        <p className="text-[12px] text-[#7A8196] font-[600]">
-          *Limit 25 MB per file.
-        </p>
-        <button
-          className="mt-8 py-[8px] px-[12px] text-[15px] font-[800] text-[#6947BF] border border-[#CEC4EB] rounded-[20px] shadow-lg"
-          onClick={openFileExplorer}
-        >
-          Upload your file
-        </button>
+
+        {file ? (
+          <div className="flex p-1 border rounded-xl gap-2 relative">
+            <div
+              className="absolute text-[#7A8196] right-[-10px] top-[-10px] rounded-[50%] border w-[20px] h-[20px] flex items-center pl-[5px] bg-white cursor-pointer"
+              onClick={removeFile}
+            >
+              x
+            </div>
+            <div>
+              <Image src={UploadedImage} />
+            </div>
+            <div className="flex gap-1">
+              <Image src={Check} />
+              <div className="flex items-center">
+                <p className="text-[#7A8196] text-[14px]">{file.name}</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="text-gray-400">
+              <FileUp size={50} strokeWidth={2.45} absoluteStrokeWidth />
+            </div>
+            <h2 className="mt-2 text-[#7A8196] font-[700] text-[15px]">
+              Drag and drop a PDF
+            </h2>
+            <p className="text-[14px] text-[#7A8196] font-[600]">
+              *Limit 25 MB per file.
+            </p>
+            <button
+              className="mt-8 py-[8px] px-[12px] text-[15px] font-[800] text-[#6947BF] border border-[#CEC4EB] rounded-[20px] shadow-xl"
+              onClick={openFileExplorer}
+            >
+              Upload your file
+            </button>
+          </>
+        )}
       </form>
       <CourseData />
     </div>

@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
       <body className="bg-blue-100">
         <Navbar />
         <SmallNavbar />
-        <div className="md:ml-[110px]">{children}</div>
+        <div className="md:ml-[80px]">{children}</div>
         <div className="hidden md:block">
           <Navscore />
         </div>

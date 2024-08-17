@@ -21,6 +21,9 @@ function FileComponent() {
         </div>
       </div>
       <div className="grid grid-cols-12">
+        <h2 className="font-[600] col-span-12 text-[#5B6170] text-[24px]">
+          My coursework
+        </h2>
         <MyCourse />
       </div>
       <div className="grid grid-cols-12">
